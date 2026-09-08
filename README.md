@@ -34,6 +34,8 @@ On Linux or macOS, run:
 
 The installer uses only built-in shell commands. By default, it symlinks all skills into both Codex and Claude Code skill directories so updates to this repo are picked up automatically.
 
+Keep this repo in place after installing with symlinks. If you want installed skills to keep working after moving or deleting the repo, use `--copy`.
+
 Install only one skill:
 
 ```bash
