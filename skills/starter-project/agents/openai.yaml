@@ -1,0 +1,3 @@
+interface:
+  display_name: "Starter Project"
+  short_description: "Create a minimal initialized project folder"

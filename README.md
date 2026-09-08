@@ -40,6 +40,6 @@ For Claude Code, copy or symlink skills into:
 
 Project-scoped skills can also live in repo-local agent skill directories when supported by the agent.
 
-## Skill Template
+## Skills
 
-Start from `templates/skill-template/SKILL.md`.
+- `skills/starter-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git.
