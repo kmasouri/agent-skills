@@ -43,7 +43,3 @@ Project-scoped skills can also live in repo-local agent skill directories when s
 ## Skill Template
 
 Start from `templates/skill-template/SKILL.md`.
-
-## Starter Skill
-
-`skills/basic-code-review` is a small example of a portable instruction-only skill.
