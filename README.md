@@ -32,7 +32,7 @@ On Linux or macOS, run:
 ./scripts/install.sh
 ```
 
-The installer uses only built-in shell commands. By default, it copies all skills into both Codex and Claude Code skill directories.
+The installer uses only built-in shell commands. By default, it symlinks all skills into both Codex and Claude Code skill directories so updates to this repo are picked up automatically.
 
 Install only one skill:
 
@@ -47,16 +47,16 @@ Install to one agent:
 ./scripts/install.sh --target claude
 ```
 
-Replace an existing installed copy:
+Replace an existing installed skill:
 
 ```bash
 ./scripts/install.sh --force
 ```
 
-Symlink instead of copying:
+Copy instead of symlinking:
 
 ```bash
-./scripts/install.sh --symlink --force
+./scripts/install.sh --copy --force
 ```
 
 For Codex, skills install into:

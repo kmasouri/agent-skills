@@ -7,7 +7,7 @@ skills_dir="$repo_root/skills"
 targets=""
 skills=""
 force=0
-link_mode=0
+copy_mode=0
 
 usage() {
   cat <<'EOF'
@@ -17,14 +17,14 @@ Options:
   --target codex|claude   Install target. Repeat to install to both. Defaults to both.
   --path PATH             Custom skill directory. Can be repeated.
   --force                 Replace existing installed skills.
-  --symlink               Symlink skills instead of copying.
+  --copy                  Copy skills instead of symlinking.
   -h, --help              Show this help.
 
 Examples:
   scripts/install.sh
   scripts/install.sh new-project
   scripts/install.sh --target codex --force
-  scripts/install.sh --path "$HOME/.agents/skills" --symlink --force
+  scripts/install.sh --path "$HOME/.agents/skills" --copy --force
 EOF
 }
 
@@ -65,8 +65,8 @@ while [ "$#" -gt 0 ]; do
       force=1
       shift
       ;;
-    --symlink)
-      link_mode=1
+    --copy)
+      copy_mode=1
       shift
       ;;
     -h|--help)
@@ -131,13 +131,13 @@ printf '%s\n' "$skills" | while IFS= read -r skill_name; do
       rm -rf "$install_path"
     fi
 
-    if [ "$link_mode" -eq 1 ]; then
-      ln -s "$skill_path" "$install_path"
-      echo "linked $install_path -> $skill_path"
-    else
+    if [ "$copy_mode" -eq 1 ]; then
       mkdir -p "$install_path"
       cp -R "$skill_path/." "$install_path/"
       echo "copied $skill_path -> $install_path"
+    else
+      ln -s "$skill_path" "$install_path"
+      echo "linked $install_path -> $skill_path"
     fi
   done
 done
