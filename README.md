@@ -26,13 +26,46 @@ Keep the portable core simple:
 
 ## Install Locally
 
-For Codex, copy or symlink skills into:
+On Linux or macOS, run:
+
+```bash
+./scripts/install.sh
+```
+
+The installer uses only built-in shell commands. By default, it copies all skills into both Codex and Claude Code skill directories.
+
+Install only one skill:
+
+```bash
+./scripts/install.sh new-project
+```
+
+Install to one agent:
+
+```bash
+./scripts/install.sh --target codex
+./scripts/install.sh --target claude
+```
+
+Replace an existing installed copy:
+
+```bash
+./scripts/install.sh --force
+```
+
+Symlink instead of copying:
+
+```bash
+./scripts/install.sh --symlink --force
+```
+
+For Codex, skills install into:
 
 ```bash
 ~/.codex/skills
 ```
 
-For Claude Code, copy or symlink skills into:
+For Claude Code, skills install into:
 
 ```bash
 ~/.claude/skills
