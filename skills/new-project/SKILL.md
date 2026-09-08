@@ -1,13 +1,13 @@
 ---
-name: starter-project
+name: new-project
 description: Create a minimal new project folder with a safe name, .gitignore, README.md, and initialized git repository.
 ---
 
-# Starter Project
+# New Project
 
 ## When To Use
 
-Use this skill when the user wants to create a fresh starter project, empty repo, scratch project, experiment folder, or minimal initialized project directory.
+Use this skill when the user wants to create a fresh project, empty repo, scratch project, experiment folder, or minimal initialized project directory.
 
 Do not use this skill for framework scaffolding unless the user explicitly asks for a specific framework or toolchain.
 

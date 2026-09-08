@@ -42,4 +42,4 @@ Project-scoped skills can also live in repo-local agent skill directories when s
 
 ## Skills
 
-- `skills/starter-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git.
+- `skills/new-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git.
