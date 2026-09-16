@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Jira Ticket"
+  short_description: "Draft and create clear Jira work items"
+  default_prompt: "Use $create-ticket to turn this request into a well-scoped Jira ticket."
