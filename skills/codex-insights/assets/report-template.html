@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{{REPORT_TITLE}}</title>
+  <style>
+    :root {
+      --ink: #171528;
+      --muted: #66627a;
+      --paper: #f7f6fb;
+      --panel: rgba(255, 255, 255, 0.84);
+      --line: rgba(45, 36, 78, 0.12);
+      --violet: #6d4aff;
+      --violet-deep: #4527c7;
+      --coral: #f47b68;
+      --mint: #35a985;
+      --amber: #c98a24;
+      --shadow: 0 18px 52px rgba(41, 30, 78, 0.10);
+      --radius: 22px;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 5% 0%, rgba(109, 74, 255, 0.18), transparent 28rem),
+        radial-gradient(circle at 100% 14%, rgba(244, 123, 104, 0.13), transparent 25rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--violet-deep); }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+
+    .shell { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; padding: 34px 0 80px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 6vw, 68px);
+      border-radius: 30px;
+      color: white;
+      background: linear-gradient(135deg, #201646 0%, #4d2fd1 56%, #7c5cfc 100%);
+      box-shadow: 0 26px 80px rgba(55, 34, 135, 0.28);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      right: -120px;
+      top: -160px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 50%;
+      box-shadow: 0 0 0 50px rgba(255, 255, 255, 0.04), 0 0 0 100px rgba(255, 255, 255, 0.025);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.82;
+    }
+
+    h1 { max-width: 820px; margin: 0; font-size: clamp(2.4rem, 7vw, 5.4rem); line-height: 0.97; letter-spacing: -0.055em; }
+    .hero-copy { max-width: 720px; margin: 24px 0 0; font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255,255,255,0.82); }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .pill { padding: 8px 12px; border: 1px solid rgba(255,255,255,0.24); border-radius: 999px; background: rgba(255,255,255,0.09); font-size: 0.86rem; }
+
+    .toolbar { display: flex; justify-content: flex-end; margin: 14px 2px; }
+    .print-button { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; color: var(--ink); background: var(--panel); cursor: pointer; font: inherit; font-weight: 700; }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0 44px; }
+    .metric { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); box-shadow: var(--shadow); backdrop-filter: blur(12px); }
+    .metric strong { display: block; font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1; letter-spacing: -0.05em; }
+    .metric span { display: block; margin-top: 8px; color: var(--muted); font-size: 0.85rem; font-weight: 700; }
+
+    main { display: grid; gap: 22px; }
+    .section { padding: clamp(24px, 4vw, 42px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
+    .section-kicker { margin: 0 0 7px; color: var(--violet); font-size: 0.76rem; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+    h2 { margin: 0 0 22px; font-size: clamp(1.55rem, 3vw, 2.35rem); letter-spacing: -0.035em; }
+    h3 { margin: 0 0 8px; font-size: 1rem; }
+    p { margin: 0 0 1em; }
+    p:last-child { margin-bottom: 0; }
+
+    .summary { font-size: clamp(1.08rem, 2vw, 1.32rem); line-height: 1.65; }
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .card { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,0.62); }
+    .card p, .card li { color: var(--muted); }
+
+    ul.clean { list-style: none; padding: 0; margin: 0; }
+    ul.clean li { position: relative; padding: 0 0 14px 26px; }
+    ul.clean li:last-child { padding-bottom: 0; }
+    ul.clean li::before { content: ""; position: absolute; left: 2px; top: 0.55em; width: 9px; height: 9px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 0 5px rgba(109,74,255,0.10); }
+
+    .bar-row { display: grid; grid-template-columns: minmax(110px, 0.8fr) 2fr auto; gap: 14px; align-items: center; margin: 14px 0; }
+    .bar-track { height: 10px; overflow: hidden; border-radius: 999px; background: #ebe8f4; }
+    .bar-fill { width: var(--value); height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--violet), #a489ff); }
+    .bar-value { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.86rem; font-weight: 800; }
+
+    .callout { padding: 20px 22px; border-left: 4px solid var(--violet); border-radius: 4px 15px 15px 4px; background: rgba(109,74,255,0.075); }
+    .callout + .callout { margin-top: 12px; }
+
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+    .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .high { color: #18785d; background: #dff5ec; }
+    .medium { color: #9a650e; background: #fff0cb; }
+    .low { color: #9c4b40; background: #ffe3df; }
+
+    .recommendations { display: grid; gap: 12px; counter-reset: rec; }
+    .recommendation { counter-increment: rec; display: grid; grid-template-columns: 42px 1fr auto; gap: 16px; align-items: start; padding: 19px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,0.62); }
+    .recommendation::before { content: counter(rec, decimal-leading-zero); display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; color: white; background: var(--violet); font-size: 0.78rem; font-weight: 900; }
+    .recommendation p { color: var(--muted); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { padding: 13px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    footer { padding: 28px 4px 0; color: var(--muted); font-size: 0.82rem; }
+
+    @media (prefers-color-scheme: dark) {
+      :root { --ink: #f3f0ff; --muted: #b8b2cc; --paper: #111019; --panel: rgba(30, 27, 43, 0.88); --line: rgba(220, 211, 255, 0.13); --shadow: 0 18px 52px rgba(0,0,0,0.24); }
+      .card, .recommendation { background: rgba(255,255,255,0.035); }
+      .bar-track { background: #343043; }
+      .high { color: #8ce1c7; background: #174c3e; }
+      .medium { color: #ffd784; background: #59431c; }
+      .low { color: #ffaaa0; background: #5c2d29; }
+      a { color: #b9a7ff; }
+    }
+
+    @media (max-width: 760px) {
+      .shell { width: min(calc(100% - 20px), var(--max)); padding-top: 10px; }
+      .hero { border-radius: 22px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .two-col, .cards { grid-template-columns: 1fr; }
+      .recommendation { grid-template-columns: 42px 1fr; }
+      .recommendation .badge { grid-column: 2; justify-self: start; }
+      .bar-row { grid-template-columns: 1fr auto; }
+      .bar-track { grid-column: 1 / -1; grid-row: 2; }
+      table { display: block; overflow-x: auto; }
+    }
+
+    @media print {
+      :root { --paper: white; --panel: white; --ink: #151321; --muted: #5d586d; --line: #ddd8e8; --shadow: none; }
+      body { background: white; font-size: 10pt; }
+      .shell { width: 100%; padding: 0; }
+      .hero { padding: 30px; border-radius: 0; box-shadow: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .toolbar { display: none; }
+      .metrics { margin-bottom: 18px; }
+      .metric, .section { break-inside: avoid; box-shadow: none; }
+      .section { padding: 24px; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <p class="eyebrow">Personal workflow retrospective</p>
+      <h1>{{REPORT_TITLE}}</h1>
+      <p class="hero-copy">{{SCOPE_NOTE}}</p>
+      <div class="hero-meta" aria-label="Report details">
+        <span class="pill">Period: {{DATE_RANGE}}</span>
+        <span class="pill">Generated: {{GENERATED_AT}}</span>
+      </div>
+    </header>
+
+    <div class="toolbar"><button class="print-button" type="button" onclick="window.print()">Print / Save PDF</button></div>
+
+    <section class="metrics" aria-label="Coverage summary">
+      <article class="metric"><strong>{{ELIGIBLE_TASKS}}</strong><span>Eligible tasks</span></article>
+      <article class="metric"><strong>{{ANALYZED_TASKS}}</strong><span>Tasks analyzed</span></article>
+      <article class="metric"><strong>{{WORKSPACES}}</strong><span>Projects / workspaces</span></article>
+      <article class="metric"><strong>{{ARCHIVED_TASKS}}</strong><span>Archived tasks included</span></article>
+    </section>
+
+    <main>
+      <section class="section">
+        <p class="section-kicker">At a glance</p>
+        <h2>Executive summary</h2>
+        <div class="summary">{{EXECUTIVE_SUMMARY}}</div>
+      </section>
+
+      <section class="section">
+        <p class="section-kicker">Portfolio</p>
+        <h2>What you work on</h2>
+        {{WORK_AREAS}}
+      </section>
+
+      <div class="two-col">
+        <section class="section">
+          <p class="section-kicker">Collaboration</p>
+          <h2>How you work with Codex</h2>
+          {{INTERACTION_PATTERNS}}
+        </section>
+        <section class="section">
+          <p class="section-kicker">Strengths</p>
+          <h2>What works well</h2>
+          {{WHAT_WORKS}}
+        </section>
+      </div>
+
+      <section class="section">
+        <p class="section-kicker">Drag</p>
+        <h2>Friction and failure patterns</h2>
+        {{FRICTION_PATTERNS}}
+      </section>
+
+      <section class="section">
+        <p class="section-kicker">Highest leverage</p>
+        <h2>Prioritized recommendations</h2>
+        <div class="recommendations">{{RECOMMENDATIONS}}</div>
+      </section>
+
+      <section class="section">
+        <p class="section-kicker">Optional drafts</p>
+        <h2>Proposed next moves</h2>
+        {{PROPOSED_NEXT_MOVES}}
+      </section>
+
+      <section class="section">
+        <p class="section-kicker">Transparency</p>
+        <h2>Coverage and methodology</h2>
+        {{METHODOLOGY}}
+      </section>
+    </main>
+
+    <footer>Generated locally by Codex Insights. Task history is paraphrased by default; this file contains no external assets or analytics.</footer>
+  </div>
+</body>
+</html>

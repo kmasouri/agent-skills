@@ -1,6 +1,6 @@
 ---
 name: codex-insights
-description: Analyze accessible Codex task history to produce a transparent personal retrospective covering work areas, interaction patterns, outcomes, friction, and actionable workflow improvements. Use when the user asks for Codex insights, a usage retrospective, recurring workflow analysis, or recommendations based on multiple past Codex tasks; do not use for current-task status, token usage alone, or a codebase review.
+description: Analyze accessible Codex task history and produce a polished, self-contained HTML retrospective covering work areas, interaction patterns, outcomes, friction, and actionable workflow improvements. Use when the user asks for Codex insights, a usage retrospective, recurring workflow analysis, or recommendations based on multiple past Codex tasks; do not use for current-task status, token usage alone, or a codebase review.
 ---
 
 # Codex Insights
@@ -54,4 +54,27 @@ Lead with a short summary, then provide:
 6. Prioritized recommendations with expected benefit and confidence
 7. Optional proposed additions to `AGENTS.md`, new skills, or automations
 
-Keep recommendations specific and traceable to evidence. Present proposed configuration or instruction changes as drafts; do not apply them without an explicit follow-up request. Return the report inline by default. If the user requests a saved artifact, prefer Markdown and use the host's user-facing output directory when one is defined.
+Keep recommendations specific and traceable to evidence. Present proposed configuration or instruction changes as drafts; do not apply them without an explicit follow-up request.
+
+### Default HTML artifact
+
+Create a polished, self-contained HTML report by default unless the user explicitly asks for Markdown, JSON, plain text, or inline-only output. Use `assets/report-template.html` as the starting point and preserve its visual system, responsive behavior, accessibility, and print styles.
+
+- Save the report as `codex-insights-YYYY-MM-DD.html` in the host's user-facing output directory when one is defined; otherwise use the current working directory.
+- Replace every `{{PLACEHOLDER}}` in the template. Remove unused optional blocks and verify that no template markers remain.
+- Escape all history-derived text before inserting it into HTML. Do not interpolate raw task content, executable markup, remote assets, analytics, or network requests.
+- Keep the artifact dependency-free: inline CSS, optional minimal inline JavaScript for progressive enhancement, and no remote fonts, scripts, or stylesheets.
+- Use semantic HTML, meaningful headings, readable contrast, visible focus states, and text labels in addition to color. Keep the layout usable on narrow screens and when printed to PDF.
+- Prefer compact metric cards, evidence callouts, confidence badges, and CSS-only bars over decorative charts. Use counts and percentages only when supported by the coverage data.
+- Keep task-level examples paraphrased and concise. Do not place raw prompts, tool logs, secrets, sensitive paths, or hidden reasoning in the artifact.
+- After writing the file, validate the HTML structure and confirm the placeholder count is zero. When the host can render local HTML, open it and visually inspect the wide, narrow, and print layouts.
+- Return a short inline summary plus a clickable link to the saved report. Do not duplicate the full report in chat.
+
+The template placeholders are intentionally broad. Compose complete HTML fragments for the main content slots rather than forcing every report into a fixed number of cards or rows:
+
+- `{{REPORT_TITLE}}`, `{{GENERATED_AT}}`, `{{DATE_RANGE}}`, and `{{SCOPE_NOTE}}`
+- `{{ELIGIBLE_TASKS}}`, `{{ANALYZED_TASKS}}`, `{{WORKSPACES}}`, and `{{ARCHIVED_TASKS}}`
+- `{{EXECUTIVE_SUMMARY}}`, `{{WORK_AREAS}}`, `{{INTERACTION_PATTERNS}}`, and `{{WHAT_WORKS}}`
+- `{{FRICTION_PATTERNS}}`, `{{RECOMMENDATIONS}}`, `{{PROPOSED_NEXT_MOVES}}`, and `{{METHODOLOGY}}`
+
+If artifact creation is unavailable, fall back to the same report structure inline and explain the limitation in one sentence.

@@ -1,4 +1,5 @@
 interface:
   display_name: "Codex Insights"
   short_description: "Analyze patterns across your Codex tasks"
-  default_prompt: "Use $codex-insights to analyze my last 30 days of Codex tasks and produce a transparent, evidence-based retrospective."
+  brand_color: "#7C5CFC"
+  default_prompt: "Use $codex-insights to analyze my last 30 days of Codex tasks and create a polished, self-contained HTML retrospective."
