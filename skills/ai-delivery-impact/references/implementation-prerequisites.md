@@ -62,9 +62,9 @@ Before calculating any flow metric:
 2. Select generated reports whose date windows cover the requested period.
 3. Parse the per-PR table, retain the report URL and reporting window, and deduplicate by repository plus PR number.
 4. Use the weekly aggregate row only for that exact weekly window. For multi-week analysis, calculate statistics from the generated per-PR values; never average weekly medians or percentiles.
-5. Batch-query GitHub for the cohort's PR number, labels, author, branch, current state, timestamps, and URL.
+5. Build an exact PR lookup allowlist from the PR URLs in those issue rows, then batch-query GitHub for only those PRs' number, labels, author, branch, current state, timestamps, and URL.
 6. Resolve complete labels immediately. Fetch descriptions, contributors, commits, reviews, or other deeper evidence only for unlabeled, incomplete, or conflicting PRs.
-7. Query merged PRs separately for the delivery cohort and query GitHub Releases for development and production release cadence.
+7. Do not search for additional PRs by merge date, author, branch, repository activity, or any other route. Query GitHub Releases separately for development and production release cadence.
 
 If a requested partial week has not produced a report, mark the period as pending. Independently calculate a flow metric only after telling the user that the canonical source lacks coverage.
 
@@ -141,21 +141,21 @@ Recommended initial taxonomy:
 
 Type labels allow the team view to answer questions such as whether AI assistance is concentrated in maintenance work, whether feature delivery is increasing, or whether faster close times merely reflect a shift toward smaller dependency updates.
 
-## 3. Fix the PR cohort definitions
+## 3. Fix the PR cohort boundary
 
-The current `mode: created` cohort answers, “What happened to PRs opened during this week?” It does not directly answer, “What work shipped this week?”
+The current `mode: created` issue answers, “What happened to PRs opened during this week?” Its PR rows are also the complete and exclusive PR lookup scope for the report.
 
-Produce at least two separate cohorts:
+Within that issue-listed cohort, preserve two views:
 
-1. **Intake cohort:** PRs created during the period. Use this for response and review-flow metrics.
-2. **Delivery cohort:** PRs merged during the period. Use this for delivered output and deployment joins.
+1. **Intake view:** every PR listed in the generated issue, using its generated response and close metrics.
+2. **Current outcome view:** those same PRs segmented by current state: merged, closed without merge, open, or draft.
 
-Do not mix those cohorts in one denominator. An intake PR can remain open beyond the week, while a PR merged this week may have been created earlier.
+Do not search for PRs that merged during the period but were created outside the selected weekly issues. Consequently, the current outcome view is not a complete inventory of everything merged during the period; state that limitation plainly. Release activity remains a separate repository-level delivery signal.
 
-- [ ] Keep or rename the existing `created` report as the intake report.
-- [ ] Query GitHub for PRs merged during the reporting period.
-- [ ] Treat closed-without-merge PRs separately from merged PRs.
+- [ ] Use the generated issue rows as the exact PR allowlist.
+- [ ] Treat merged, closed-without-merge, open, and draft states separately within that allowlist.
 - [ ] Preserve open and draft PRs as censored observations rather than assigning them a completed duration.
+- [ ] Disclose that PRs created outside the selected issue windows are outside scope even if they merged during the reporting period.
 
 ## 4. Define the flow metrics precisely
 
@@ -176,8 +176,9 @@ Do not add first-review, time-to-merge, review-iteration, changes-requested, or 
 Keep collection read-only and avoid a new ingestion pipeline.
 
 - [ ] Parse PR URLs and numbers from each generated metrics issue.
-- [ ] Batch-query lightweight PR metadata for the intake cohort: labels, author, head branch, current state, `createdAt`, `closedAt`, `mergedAt`, and URL.
-- [ ] Query PRs merged during the period as a separate delivery cohort.
+- [ ] Treat the parsed repository-plus-PR-number set as an exact lookup allowlist.
+- [ ] Batch-query lightweight PR metadata only for that cohort: labels, author, head branch, current state, `createdAt`, `closedAt`, `mergedAt`, and URL.
+- [ ] Reject or flag any enrichment result not traceable to a selected issue row.
 - [ ] Resolve AI and work type from labels without deeper calls when the declaration is complete.
 - [ ] Fetch the PR description, contributors, commit trailers, task links, reviews, or checks only when primary labels are absent, incomplete, or conflicting.
 - [ ] Record attribution confidence and the evidence source used.
@@ -193,7 +194,7 @@ The current search query excludes several dependency and automation accounts, wh
 
 - [ ] Maintain separate registries for dependency bots, workflow bots, and AI assistants.
 - [ ] Exclude dependency and workflow bots from human-review response calculations where appropriate.
-- [ ] Retain AI-assistant-authored PRs in the delivery cohort.
+- [ ] Retain AI-assistant-authored PRs in the issue-listed cohort.
 - [ ] Ignore bot reviews and bot comments when measuring the first human response.
 - [ ] Report automation-only maintenance separately if it would distort feature and defect work.
 
@@ -258,7 +259,7 @@ Do not add revision or reversion counts merely because they are available. Their
 - [ ] Generated metrics issues discovered and parsed across repositories
 - [ ] Batched GitHub label and lifecycle enrichment
 - [ ] Fallback evidence fetched only for incomplete PRs
-- [ ] Separate intake and delivery cohorts
+- [ ] Issue-listed PR allowlist with intake and current-outcome views
 - [ ] Weekly `.rc` and full-release lookup
 
 ### Phase 2: Team context and release trends
@@ -279,8 +280,8 @@ Do not add revision or reversion counts merely because they are available. Their
 
 Once Phase 1 is complete, report these measures for AI-assisted, explicitly non-AI, and unknown-attribution cohorts:
 
-- Merged PR count
-- Share of merged PRs with confirmed or probable AI attribution
+- Merged PR count within the issue-listed cohort
+- Share of merged, issue-listed PRs with confirmed or probable AI attribution
 - PR count by primary work type
 - Median and 90th-percentile time to first response
 - Median and 90th-percentile time to close

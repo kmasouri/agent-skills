@@ -102,6 +102,8 @@ Do not collapse delivery, speed, quality, adoption, and attribution confidence i
 
 ## Source joins
 
+For the Compass weekly report, enrich only PRs explicitly listed in the selected generated metrics issues. The repository-plus-PR-number pairs parsed from those issues form an exact allowlist. Do not add PRs discovered through merged searches, repository activity, authors, branches, releases, or fallback evidence. Releases remain a separate repository-level source and do not expand the PR cohort.
+
 Prefer stable identifiers in this order:
 
 1. Explicit artifact link recorded by the AI tool or agent.
@@ -125,4 +127,4 @@ For each reporting period and cohort, show:
 
 Add short artifact examples with links when permitted. Examples make the analysis auditable; they should not become an individual ranking.
 
-Include a source ledger beneath the scorecard. For each measure, identify the generated GitHub issue, its coverage window, missing observations, batched GitHub enrichment fields, deeper attribution lookups, and any disclosed `github-backfilled` calculation.
+Include a source ledger beneath the scorecard. For each measure, identify the generated GitHub issue, its coverage window, exact issue-listed PR count, missing observations, batched GitHub enrichment fields, deeper attribution lookups, and any disclosed `github-backfilled` calculation.
