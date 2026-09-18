@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Delivery Impact"
+  short_description: "Measure AI-assisted work that actually ships"
+  default_prompt: "Use $ai-delivery-impact to assess AI-assisted delivery across code, PRs, deployments, and documentation."
