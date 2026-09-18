@@ -48,10 +48,11 @@ Reuse the organization's generated metrics rather than reconstructing the same m
 
 | Data | Canonical source | Direct GitHub use |
 | --- | --- | --- |
-| Time to first response, time to close, comment count, weekly intake counts | Row-level values in the generated weekly metrics issue | Backfill a missing close duration only when the snapshot captured an open PR that later closed; mark it `github-backfilled` |
+| Time to first response, time to close, comment count, weekly intake counts | Row-level values in the generated weekly metrics issue | Do not recalculate or backfill missing values |
 | AI authoring attribution and work type | Standardized PR labels and structured provenance | Read labels, description declarations, registered assistant identities, and controlled branch conventions |
 | AI review activity | Registered reviewer/check identities | Read reviews, comments, and checks without treating review-only activity as AI authoring |
-| Current and final PR state | GitHub PR record | Enrich the generated snapshot and backfill only missing close durations |
+| Snapshot open and closed status | Generated weekly metrics issue | Preserve the point-in-time snapshot |
+| Current outcome state | GitHub PR record | Report separately for issue-listed PRs; do not use it to revise or backfill timing metrics |
 | Development and production releases | GitHub Releases | Read `.rc` prereleases and full releases |
 
 ### Required discovery sequence
@@ -62,7 +63,7 @@ Before calculating any flow metric:
 2. Select generated reports whose date windows cover the requested period.
 3. Parse the per-PR table, retain the report URL and reporting window, and deduplicate by repository plus PR number.
 4. Use the weekly aggregate row only for that exact weekly window. For multi-week analysis, calculate statistics from the generated per-PR values; never average weekly medians or percentiles.
-5. Build an exact PR lookup allowlist from the PR URLs in those issue rows, then batch-query GitHub for only those PRs' number, labels, author, branch, current state, timestamps, and URL.
+5. Build an exact PR lookup allowlist from the PR URLs in those issue rows, then batch-query GitHub for only those PRs' number, labels, author, branch, current state, and URL.
 6. Resolve complete labels immediately. Fetch descriptions, contributors, commits, reviews, or other deeper evidence only for unlabeled, incomplete, or conflicting PRs.
 7. Do not search for additional PRs by merge date, author, branch, repository activity, or any other route. Query GitHub Releases separately for development and production release cadence.
 
@@ -72,7 +73,7 @@ If a requested partial week has not produced a report, mark the period as pendin
 
 The weekly issue is generated after the intake week and is not updated when an initially open PR later closes. For example, [compass-voice-api#502](https://github.com/RedVentures/compass-voice-api/issues/502) records PR #501 as open with no close time even though the PR subsequently merged.
 
-Retain the generated value as missing, enrich the current state from GitHub, and calculate `closedAt - createdAt` as a separate `github-backfilled` close duration. Never overwrite or present the backfill as if it came from Issue Metrics. Open PRs remain censored.
+Retain that missing duration and snapshot status exactly as generated. Do not fetch current lifecycle timestamps to backfill or revise the record. Because the workflow uses `mode: created`, that PR will not appear in the following week's created cohort merely because it later closed. Missing close times are therefore censored observations and may systematically underrepresent longer-lived PRs; disclose the count with every close-time statistic.
 
 ### Source ledger required in every report
 
@@ -83,9 +84,8 @@ Record, at minimum:
 - Number of parsed per-PR rows
 - Missing or pending weekly windows
 - Metrics read from the generated issue
-- Fields added by the batched GitHub query
+- Classification fields added by the batched GitHub query
 - Deeper fallback evidence fetched for incomplete attribution
-- Any `github-backfilled` duration and why it was necessary
 
 Jira and third-party engineering dashboards are outside the initial architecture. The GitHub-native report must remain complete without them.
 
@@ -148,12 +148,12 @@ The current `mode: created` issue answers, “What happened to PRs opened during
 Within that issue-listed cohort, preserve two views:
 
 1. **Intake view:** every PR listed in the generated issue, using its generated response and close metrics.
-2. **Current outcome view:** those same PRs segmented by current state: merged, closed without merge, open, or draft.
+2. **Outcome context:** those same PRs segmented by current GitHub state, reported separately from the generated snapshot.
 
 Do not search for PRs that merged during the period but were created outside the selected weekly issues. Consequently, the current outcome view is not a complete inventory of everything merged during the period; state that limitation plainly. Release activity remains a separate repository-level delivery signal.
 
 - [ ] Use the generated issue rows as the exact PR allowlist.
-- [ ] Treat merged, closed-without-merge, open, and draft states separately within that allowlist.
+- [ ] Preserve the generated issue's point-in-time open and closed status and keep it separate from current GitHub state.
 - [ ] Preserve open and draft PRs as censored observations rather than assigning them a completed duration.
 - [ ] Disclose that PRs created outside the selected issue windows are outside scope even if they merged during the reporting period.
 
@@ -177,12 +177,12 @@ Keep collection read-only and avoid a new ingestion pipeline.
 
 - [ ] Parse PR URLs and numbers from each generated metrics issue.
 - [ ] Treat the parsed repository-plus-PR-number set as an exact lookup allowlist.
-- [ ] Batch-query lightweight PR metadata only for that cohort: labels, author, head branch, current state, `createdAt`, `closedAt`, `mergedAt`, and URL.
+- [ ] Batch-query lightweight PR metadata only for that cohort: labels, author, head branch, current state, and URL.
 - [ ] Reject or flag any enrichment result not traceable to a selected issue row.
 - [ ] Resolve AI and work type from labels without deeper calls when the declaration is complete.
 - [ ] Fetch the PR description, contributors, commit trailers, task links, reviews, or checks only when primary labels are absent, incomplete, or conflicting.
 - [ ] Record attribution confidence and the evidence source used.
-- [ ] Backfill a missing generated close duration only for a PR that later closed; mark the value `github-backfilled`.
+- [ ] Preserve missing generated durations as censored; never backfill them from current GitHub state or timestamps.
 - [ ] Read GitHub Releases once per repository and reporting period.
 - [ ] Cache or deduplicate by repository and PR number within the run.
 
@@ -257,9 +257,9 @@ Do not add revision or reversion counts merely because they are available. Their
 - [ ] Standard labels
 - [ ] Primary type labels
 - [ ] Generated metrics issues discovered and parsed across repositories
-- [ ] Batched GitHub label and lifecycle enrichment
+- [ ] Batched GitHub classification enrichment
 - [ ] Fallback evidence fetched only for incomplete PRs
-- [ ] Issue-listed PR allowlist with intake and current-outcome views
+- [ ] Issue-listed PR allowlist with point-in-time metrics and separate current-outcome context
 - [ ] Weekly `.rc` and full-release lookup
 
 ### Phase 2: Team context and release trends

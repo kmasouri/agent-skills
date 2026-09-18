@@ -79,7 +79,7 @@ When enforcement is requested, recommend repository instructions and PR template
 
 Report counts alongside rates and cohort size.
 
-Use organization-generated per-artifact values when they exist. The formulas below define meaning and support validation; they do not authorize silently replacing the canonical source with a fresh calculation from raw events. Preserve the source record, reporting window, and whether the value was generated, enriched, or `github-backfilled` because the generated snapshot captured an unfinished PR.
+Use organization-generated per-artifact values when they exist. The formulas below define meaning and support validation; they do not authorize silently replacing the canonical source with a fresh calculation from raw events. Preserve the point-in-time source record and reporting window. Missing durations remain censored and must not be backfilled from the PR's later state or timestamps.
 
 - Acceptance rate = accepted attributed artifacts / created attributed artifacts.
 - Delivery rate = delivered attributed artifacts / accepted attributed artifacts eligible for deployment.
@@ -127,4 +127,4 @@ For each reporting period and cohort, show:
 
 Add short artifact examples with links when permitted. Examples make the analysis auditable; they should not become an individual ranking.
 
-Include a source ledger beneath the scorecard. For each measure, identify the generated GitHub issue, its coverage window, exact issue-listed PR count, missing observations, batched GitHub enrichment fields, deeper attribution lookups, and any disclosed `github-backfilled` calculation.
+Include a source ledger beneath the scorecard. For each measure, identify the generated GitHub issue, its coverage window, exact issue-listed PR count, missing observations, batched GitHub classification fields, and deeper attribution lookups.
