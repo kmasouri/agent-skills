@@ -79,4 +79,4 @@ Project-scoped skills can also live in repo-local agent skill directories when s
 
 - `skills/codex-insights`: analyze accessible Codex task history for work patterns, outcomes, friction, and actionable improvements.
 - `skills/create-ticket`: draft engineering Jira tickets and create them in the Compass Project after explicit confirmation.
-- `skills/new-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git.
+- `skills/new-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git, or scaffold one from a registered template (see `skills/new-project/references/templates.md`), such as the `fastify-service` template.
