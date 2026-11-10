@@ -1,11 +1,11 @@
 {
-  "name": "kmasouri-agent-skills",
+  "name": "kmasouri-skills",
   "interface": {
-    "displayName": "Kayvan Masouri Agent Skills"
+    "displayName": "Kayvan Masouri Skills"
   },
   "plugins": [
     {
-      "name": "agent-skills",
+      "name": "kmasouri-skills",
       "source": {
         "source": "local",
         "path": "./"
