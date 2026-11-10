@@ -54,8 +54,7 @@ To pick up new changes, run `codex plugin marketplace upgrade`.
 
 ### Adding a Skill
 
-- Claude Code: add the skill folder to the plugin's `skills` list in `.claude-plugin/marketplace.json`.
-- Codex: `.codex-plugin/plugin.json` picks up everything under `skills/` automatically, so no change is needed.
+Both Claude Code and Codex pick up every folder under `skills/` automatically, so adding a skill folder is all it takes.
 
 ## Skills
 
