@@ -1,0 +1,16 @@
+{
+  "name": "kmasouri-agent-skills",
+  "owner": {
+    "name": "Kayvan Masouri"
+  },
+  "metadata": {
+    "description": "Portable skills for AI coding agents such as Codex and Claude."
+  },
+  "plugins": [
+    {
+      "name": "agent-skills",
+      "description": "Kayvan Masouri's agent skills: AI delivery impact, Codex insights, Jira tickets, and new-project scaffolding.",
+      "source": "./"
+    }
+  ]
+}

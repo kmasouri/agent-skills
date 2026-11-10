@@ -1,0 +1,20 @@
+{
+  "name": "kmasouri-agent-skills",
+  "interface": {
+    "displayName": "Kayvan Masouri Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "agent-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
