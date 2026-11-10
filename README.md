@@ -24,59 +24,42 @@ Keep the portable core simple:
 - Put reusable templates or media in `assets/`.
 - Avoid agent-specific metadata in the portable skill unless an adapter needs it.
 
-## Install Locally
+## Install
 
-On Linux or macOS, run:
+This repo is a plugin marketplace for both Claude Code and Codex. All skills ship together as the `agent-skills` plugin.
 
-```bash
-./scripts/install.sh
+### Claude Code
+
+```text
+/plugin marketplace add kmasouri/agent-skills
+/plugin install agent-skills@kmasouri-agent-skills
 ```
 
-The installer uses only built-in shell commands. By default, it symlinks all skills into both Codex and Claude Code skill directories so updates to this repo are picked up automatically.
+On Claude Code 2.1.275 or later, you can do both in one step:
 
-Keep this repo in place after installing with symlinks. If you want installed skills to keep working after moving or deleting the repo, use `--copy`.
-
-Install only one skill:
-
-```bash
-./scripts/install.sh new-project
+```text
+/plugin install agent-skills --marketplace kmasouri/agent-skills
 ```
 
-Install to one agent:
+Installed skills are namespaced by the plugin, for example `/agent-skills:new-project`.
+
+### Codex
 
 ```bash
-./scripts/install.sh --target codex
-./scripts/install.sh --target claude
+codex plugin marketplace add kmasouri/agent-skills
+codex plugin add agent-skills@kmasouri-agent-skills
 ```
 
-Replace an existing installed skill:
+To pick up new changes, run `codex plugin marketplace upgrade`.
 
-```bash
-./scripts/install.sh --force
-```
+### Adding a Skill
 
-Copy instead of symlinking:
-
-```bash
-./scripts/install.sh --copy --force
-```
-
-For Codex, skills install into:
-
-```bash
-~/.codex/skills
-```
-
-For Claude Code, skills install into:
-
-```bash
-~/.claude/skills
-```
-
-Project-scoped skills can also live in repo-local agent skill directories when supported by the agent.
+- Claude Code: add the skill folder to the plugin's `skills` list in `.claude-plugin/marketplace.json`.
+- Codex: `.codex-plugin/plugin.json` loads everything under `skills/`, so no change is needed there. Bump its `version` when you release changes.
 
 ## Skills
 
+- `skills/ai-delivery-impact`: measure and explain AI-assisted delivery from attributable code, pull requests, deployments, and published documentation.
 - `skills/codex-insights`: analyze accessible Codex task history for work patterns, outcomes, friction, and actionable improvements.
 - `skills/create-ticket`: draft engineering Jira tickets and create them in the Compass Project after explicit confirmation.
 - `skills/new-project`: create a minimal project folder with `.gitignore`, `README.md`, and initialized git, or scaffold one from a registered template (see `skills/new-project/references/templates.md`), such as the `fastify-service` template.
