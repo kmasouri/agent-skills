@@ -1,5 +1,5 @@
 {
-  "name": "kmasouri-agent-skills",
+  "name": "kmasouri-skills",
   "owner": {
     "name": "Kayvan Masouri"
   },
@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "agent-skills",
+      "name": "kmasouri-skills",
       "description": "Kayvan Masouri's agent skills: AI delivery impact, Codex insights, Jira tickets, and new-project scaffolding.",
       "source": "./"
     }

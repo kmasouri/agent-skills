@@ -26,28 +26,28 @@ Keep the portable core simple:
 
 ## Install
 
-This repo is a plugin marketplace for both Claude Code and Codex. All skills ship together as the `agent-skills` plugin.
+This repo is a plugin marketplace for both Claude Code and Codex. All skills ship together as the `kmasouri-skills` plugin.
 
 ### Claude Code
 
 ```text
 /plugin marketplace add kmasouri/agent-skills
-/plugin install agent-skills@kmasouri-agent-skills
+/plugin install kmasouri-skills@kmasouri-skills
 ```
 
 On Claude Code 2.1.275 or later, you can do both in one step:
 
 ```text
-/plugin install agent-skills --marketplace kmasouri/agent-skills
+/plugin install kmasouri-skills --marketplace kmasouri/agent-skills
 ```
 
-Installed skills are namespaced by the plugin, for example `/agent-skills:new-project`.
+Installed skills are namespaced by the plugin, for example `/kmasouri-skills:new-project`.
 
 ### Codex
 
 ```bash
 codex plugin marketplace add kmasouri/agent-skills
-codex plugin add agent-skills@kmasouri-agent-skills
+codex plugin add kmasouri-skills@kmasouri-skills
 ```
 
 To pick up new changes, run `codex plugin marketplace upgrade`.
